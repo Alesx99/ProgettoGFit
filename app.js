@@ -110,87 +110,43 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEnv = 'home';
     let currentLvl = 1;
 
-    // ---- SVG Stickman Definitions ----
+    // ---- Abstract Minimalist Animated Icons ----
     const stickmanAnims = {
         squat: `
-            <svg viewBox="0 0 100 150" class="anim-squat">
-                <!-- Head -->
-                <circle cx="50" cy="20" r="12" />
-                <g style="animation: squatMove 2s ease-in-out infinite;">
-                    <!-- Body -->
-                    <path d="M 50 32 L 50 60" />
-                    <!-- Left Leg -->
-                    <path d="M 50 60 L 35 100 L 30 140" style="animation: squatKneeLeft 2s ease-in-out infinite;" />
-                    <!-- Right Leg -->
-                    <path d="M 50 60 L 65 100 L 70 140" style="animation: squatKneeRight 2s ease-in-out infinite;" />
-                    <!-- Left Arm -->
-                    <path d="M 50 35 L 30 60 L 50 50" style="animation: squatArmLeft 2s ease-in-out infinite;" />
-                    <!-- Right Arm -->
-                    <path d="M 50 35 L 70 60 L 50 50" style="animation: squatArmRight 2s ease-in-out infinite;" />
-                </g>
+            <svg viewBox="0 0 100 150" class="anim-abstract">
+                <path d="M 50 20 L 50 130" style="stroke: rgba(255,255,255,0.2); stroke-width: 4; stroke-dasharray: 4 4;" />
+                <circle cx="50" cy="20" r="14" style="fill: var(--primary); animation: animVerticalMove 2s ease-in-out infinite;" />
+                <path d="M 30 110 L 50 130 L 70 110" style="stroke: var(--primary); stroke-width: 6; fill: none; opacity: 0.5;" />
             </svg>
         `,
         pushup: `
-            <svg viewBox="0 0 150 100" class="anim-pushup">
-                <!-- Floor Line -->
-                <path d="M 10 90 L 140 90" style="stroke: rgba(255,255,255,0.2); stroke-width: 2;" />
-                <g style="animation: pushupBody 2s ease-in-out infinite;">
-                    <circle cx="110" cy="40" r="10" /> <!-- Head -->
-                    <!-- Body -->
-                    <path d="M 100 45 L 30 75" />
-                    <!-- Legs -->
-                    <path d="M 30 75 L 10 85" />
-                </g>
-                <!-- Arms (separate to bend) -->
-                <path d="M 90 50 L 90 90" style="animation: pushupArm 2s ease-in-out infinite;" />
+            <svg viewBox="0 0 150 100" class="anim-abstract">
+                <path d="M 20 90 L 130 90" style="stroke: rgba(255,255,255,0.2); stroke-width: 4;" />
+                <circle cx="75" cy="50" r="14" style="fill: var(--secondary); animation: animPushMove 2s ease-in-out infinite;" />
+                <path d="M 55 30 L 75 10 L 95 30" style="stroke: var(--secondary); stroke-width: 6; fill: none; animation: animFade 2s ease-in-out infinite;" />
             </svg>
         `,
         run: `
-            <svg viewBox="0 0 100 150" class="anim-run">
-                <g style="animation: runBodyBounce 1s linear infinite;">
-                    <circle cx="50" cy="20" r="10" /> <!-- Head -->
-                    <!-- Body -->
-                    <path d="M 50 30 L 50 70" />
-                    <!-- Left Arm -->
-                    <path d="M 50 35 L 30 50 L 50 70" style="animation: runArmLeft 0.5s ease-in-out infinite alternate;" />
-                    <!-- Right Arm -->
-                    <path d="M 50 35 L 70 50 L 80 30" style="animation: runArmRight 0.5s ease-in-out infinite alternate;" />
-                    <!-- Left Leg -->
-                    <path d="M 50 70 L 30 100 L 40 130" style="animation: runLegLeft 0.5s ease-in-out infinite alternate;" />
-                    <!-- Right Leg -->
-                    <path d="M 50 70 L 70 90 L 50 130" style="animation: runLegRight 0.5s ease-in-out infinite alternate;" />
+            <svg viewBox="0 0 150 100" class="anim-abstract">
+                <g style="fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round;">
+                    <path d="M 30 20 L 60 50 L 30 80" style="animation: animPulse 1s linear infinite; animation-delay: 0s;" />
+                    <path d="M 60 20 L 90 50 L 60 80" style="animation: animPulse 1s linear infinite; animation-delay: 0.2s;" />
+                    <path d="M 90 20 L 120 50 L 90 80" style="animation: animPulse 1s linear infinite; animation-delay: 0.4s;" />
                 </g>
             </svg>
         `,
         lift: `
-            <svg viewBox="0 0 100 150" class="anim-lift">
-                <!-- Barbell -->
-                <path d="M 20 90 L 80 90" style="stroke: #a0a0a0; stroke-width: 4;" />
-                <circle cx="20" cy="90" r="8" style="fill: #39FF14; stroke: none;" />
-                <circle cx="80" cy="90" r="8" style="fill: #39FF14; stroke: none;" />
-                
-                <circle cx="50" cy="15" r="10" /> <!-- Head -->
-                <!-- Body -->
-                <path d="M 50 25 L 50 70" style="animation: liftBody 2.5s ease-in-out infinite;" />
-                <!-- Legs -->
-                <path d="M 50 70 L 40 100 L 40 130" />
-                <path d="M 50 70 L 60 100 L 60 130" />
-                <!-- Arms pulling -->
-                <path d="M 50 30 L 50 90" style="animation: liftArm 2.5s ease-in-out infinite;" />
+            <svg viewBox="0 0 100 150" class="anim-abstract">
+                <rect x="20" y="110" width="60" height="20" rx="4" style="fill: rgba(255,255,255,0.2);" />
+                <path d="M 50 110 L 50 30" style="stroke: var(--primary); stroke-width: 8; stroke-linecap: round; animation: animLiftMove 2s ease-in-out infinite;" />
+                <path d="M 30 50 L 50 30 L 70 50" style="fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; animation: animLiftMove 2s ease-in-out infinite;" />
             </svg>
         `,
         core: `
-            <svg viewBox="0 0 150 100" class="anim-core">
-                <!-- Floor -->
-                <path d="M 10 90 L 140 90" style="stroke: rgba(255,255,255,0.2); stroke-width: 2;" />
-                <!-- Head -->
-                <circle cx="20" cy="80" r="10" style="animation: crunchHead 2s ease-in-out infinite;" />
-                <!-- Legs -->
-                <path d="M 80 80 L 100 50 L 120 90" />
-                <!-- Body Curling -->
-                <path d="M 20 80 Q 50 80 80 80" style="animation: crunchBody 2s ease-in-out infinite;" />
-                <!-- Arms behind head -->
-                <path d="M 40 70 L 30 50 L 15 75" style="animation: crunchHead 2s ease-in-out infinite;" />
+            <svg viewBox="0 0 100 100" class="anim-abstract">
+                <circle cx="50" cy="50" r="30" style="fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 8;" />
+                <circle cx="50" cy="50" r="30" style="fill: none; stroke: var(--secondary); stroke-width: 8; stroke-dasharray: 188; stroke-dashoffset: 188; animation: animCoreRing 3s ease-in-out infinite;" />
+                <circle cx="50" cy="50" r="10" style="fill: var(--primary); animation: animCoreBreath 3s ease-in-out infinite;" />
             </svg>
         `
     };
