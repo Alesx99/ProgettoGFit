@@ -110,56 +110,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEnv = 'home';
     let currentLvl = 1;
 
-    // ---- Abstract Minimalist Animated Icons ----
-    const stickmanAnims = {
-        squat: `
-            <svg viewBox="0 0 100 150" class="anim-abstract">
-                <path d="M 50 20 L 50 130" style="stroke: rgba(255,255,255,0.2); stroke-width: 4; stroke-dasharray: 4 4;" />
-                <circle cx="50" cy="20" r="14" style="fill: var(--primary); animation: animVerticalMove 2s ease-in-out infinite;" />
-                <path d="M 30 110 L 50 130 L 70 110" style="stroke: var(--primary); stroke-width: 6; fill: none; opacity: 0.5;" />
-            </svg>
-        `,
-        pushup: `
-            <svg viewBox="0 0 150 100" class="anim-abstract">
-                <path d="M 20 90 L 130 90" style="stroke: rgba(255,255,255,0.2); stroke-width: 4;" />
-                <circle cx="75" cy="50" r="14" style="fill: var(--secondary); animation: animPushMove 2s ease-in-out infinite;" />
-                <path d="M 55 30 L 75 10 L 95 30" style="stroke: var(--secondary); stroke-width: 6; fill: none; animation: animFade 2s ease-in-out infinite;" />
-            </svg>
-        `,
-        run: `
-            <svg viewBox="0 0 150 100" class="anim-abstract">
-                <g style="fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round;">
-                    <path d="M 30 20 L 60 50 L 30 80" style="animation: animPulse 1s linear infinite; animation-delay: 0s;" />
-                    <path d="M 60 20 L 90 50 L 60 80" style="animation: animPulse 1s linear infinite; animation-delay: 0.2s;" />
-                    <path d="M 90 20 L 120 50 L 90 80" style="animation: animPulse 1s linear infinite; animation-delay: 0.4s;" />
-                </g>
-            </svg>
-        `,
-        lift: `
-            <svg viewBox="0 0 100 150" class="anim-abstract">
-                <rect x="20" y="110" width="60" height="20" rx="4" style="fill: rgba(255,255,255,0.2);" />
-                <path d="M 50 110 L 50 30" style="stroke: var(--primary); stroke-width: 8; stroke-linecap: round; animation: animLiftMove 2s ease-in-out infinite;" />
-                <path d="M 30 50 L 50 30 L 70 50" style="fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; animation: animLiftMove 2s ease-in-out infinite;" />
-            </svg>
-        `,
-        core: `
-            <svg viewBox="0 0 100 100" class="anim-abstract">
-                <circle cx="50" cy="50" r="30" style="fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 8;" />
-                <circle cx="50" cy="50" r="30" style="fill: none; stroke: var(--secondary); stroke-width: 8; stroke-dasharray: 188; stroke-dashoffset: 188; animation: animCoreRing 3s ease-in-out infinite;" />
-                <circle cx="50" cy="50" r="10" style="fill: var(--primary); animation: animCoreBreath 3s ease-in-out infinite;" />
-            </svg>
-        `
-    };
-
-    // Helper to determine animation type matching the exercise name
-    function getAnimationType(name) {
+    // ---- Minimalist Modal Icons & Variants ----
+    // Helper to determine the best FontAwesome icon
+    function getExerciseIcon(name) {
         const lowerName = name.toLowerCase();
-        if (lowerName.includes('squat') || lowerName.includes('affondi')) return 'squat';
-        if (lowerName.includes('push') || lowerName.includes('flessioni') || lowerName.includes('press') || lowerName.includes('panca')) return 'pushup';
-        if (lowerName.includes('sprint') || lowerName.includes('jump') || lowerName.includes('balzi') || lowerName.includes('scatti')) return 'run';
-        if (lowerName.includes('rematore') || lowerName.includes('stacc') || lowerName.includes('trazioni') || lowerName.includes('tira')) return 'lift';
-        if (lowerName.includes('plank') || lowerName.includes('core') || lowerName.includes('twist') || lowerName.includes('crunch') || lowerName.includes('hollow')) return 'core';
-        return 'lift'; // Fallback
+        if (lowerName.includes('squat') || lowerName.includes('affondi') || lowerName.includes('leg') || lowerName.includes('jump')) return '<i class="fa-solid fa-child-reaching modal-icon-anim"></i>';
+        if (lowerName.includes('push') || lowerName.includes('flessioni') || lowerName.includes('press') || lowerName.includes('panca') || lowerName.includes('alzate')) return '<i class="fa-solid fa-dumbbell modal-icon-anim"></i>';
+        if (lowerName.includes('sprint') || lowerName.includes('corsa') || lowerName.includes('agility') || lowerName.includes('suicide') || lowerName.includes('drill')) return '<i class="fa-solid fa-person-running modal-icon-anim"></i>';
+        if (lowerName.includes('rematore') || lowerName.includes('stacc') || lowerName.includes('trazioni') || lowerName.includes('tira') || lowerName.includes('curl')) return '<i class="fa-solid fa-weight-hanging modal-icon-anim"></i>';
+        if (lowerName.includes('plank') || lowerName.includes('core') || lowerName.includes('twist') || lowerName.includes('crunch') || lowerName.includes('hollow') || lowerName.includes('rollout')) return '<i class="fa-solid fa-stopwatch modal-icon-anim"></i>';
+        return '<i class="fa-solid fa-fire modal-icon-anim"></i>'; // Fallback
+    }
+
+    // Helper to provide variations or intensive tweaks
+    function getVariantData(name) {
+        const lowerName = name.toLowerCase();
+        if (lowerName.includes('squat')) return "Variante: Aggiungi un fermo di 2 secondi nel punto più basso per eliminare il riflesso elastico e costruire maggiore forza pura.";
+        if (lowerName.includes('affondi')) return "Variante Atletica: Esegui affondi saltati per aumentare il battito cardiaco e sviluppare potenza esplosiva nelle gambe.";
+        if (lowerName.includes('push') || lowerName.includes('flessioni')) return "Adattamento: Se fatichi, appoggia le ginocchia. Per maggiore difficoltà, eleva i piedi su una sedia o aggiungi un battito di mani (Clap Push-up).";
+        if (lowerName.includes('panca') || lowerName.includes('spinte')) return "Variante Ipertrofia: Discesa lentissima (4 secondi) ed esplosività massima in risalita. Mantieni sempre i gomiti non troppo larghi.";
+        if (lowerName.includes('sprint') || lowerName.includes('scatti')) return "Pro Tip: Parti da terra prono (pancia in giù) per allenare i primi passi esplosivi o varia cambiando direzione ai 10 metri.";
+        if (lowerName.includes('jump') || lowerName.includes('balzi')) return "Focus: Atterra nel modo più silenzioso possibile, ammortizzando piegando le ginocchia. Proteggi le articolazioni.";
+        if (lowerName.includes('rematore') || lowerName.includes('trazioni') || lowerName.includes('lat')) return "Variante: Ferma il peso in massima contrazione (quando tocca il corpo o lo sterno) per 1-2 secondi intensificando il lavoro muscolare.";
+        if (lowerName.includes('plank') || lowerName.includes('core') || lowerName.includes('crunch')) return "Tecnica: Durante il movimento, espira completamente e contrai i glutei. Questo azzera totalmente i pesi sulla fascia lombare.";
+        return "Variante Intensiva: Riduci i tempi di recupero di 15 secondi rispetto al solito o aumenta leggermente il carico mantenendo una tecnica perfetta.";
     }
 
     // ---- DOM Elements ----
@@ -174,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modal-title');
     const modalReps = document.getElementById('modal-reps');
     const modalDesc = document.getElementById('modal-desc');
-    const stickmanContainer = document.getElementById('stickman-container');
+    const modalRecom = document.getElementById('modal-variant-text');
 
     
     // ---- Navigation Logic ----
@@ -308,9 +282,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalReps.innerText = reps;
                 modalDesc.innerText = desc;
 
-                // Set Animation
-                const animKey = getAnimationType(h4);
-                stickmanContainer.innerHTML = stickmanAnims[animKey];
+                // Set Modifying Data
+                const iconHTML = getExerciseIcon(h4);
+                const variantText = getVariantData(h4);
+
+                stickmanContainer.innerHTML = iconHTML;
+                modalRecom.innerText = variantText;
 
                 // Show Modal
                 exerciseModal.classList.add('active');
@@ -321,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Modal Close Logic
     modalCloseBtn.addEventListener('click', () => {
         exerciseModal.classList.remove('active');
-        // Clear SVG after transition to avoid weird glitches on reopening
         setTimeout(() => stickmanContainer.innerHTML = '', 400); 
     });
 

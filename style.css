@@ -756,59 +756,33 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.6;
 }
 
-/* Stickman Container & General SVG Styles */
-#stickman-container svg {
-    width: 150px;
-    height: 150px;
-    stroke: var(--primary);
-    stroke-width: 6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-    filter: drop-shadow(0 0 8px var(--primary-glow));
+.modal-variant-box {
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid var(--primary);
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+    color: var(--text-main);
+}
+.modal-variant-box i {
+    color: var(--primary);
+    margin-right: 5px;
 }
 
-#stickman-container svg circle {
-    fill: var(--bg-color);
-    stroke-width: 5;
+/* Modal Icons Animation */
+.modal-icon-anim {
+    font-size: 80px;
+    color: var(--primary);
+    filter: drop-shadow(0 0 15px var(--primary-glow));
+    animation: modalIconPulse 3s ease-in-out infinite;
 }
 
-/* --- Abstract Animations Specific --- */
-
-@keyframes animVerticalMove {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-70px); }
+@keyframes modalIconPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary-glow)); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 25px var(--primary)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--primary-glow)); }
 }
 
-@keyframes animPushMove {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(-40px); }
-}
 
-@keyframes animFade {
-    0%, 100% { opacity: 0.2; transform: translateX(0); }
-    50% { opacity: 1; transform: translateX(-20px); }
-}
-
-@keyframes animPulse {
-    0% { opacity: 0.1; transform: translateX(0); }
-    50% { opacity: 1; transform: translateX(20px); }
-    100% { opacity: 0.1; transform: translateX(0); }
-}
-
-@keyframes animLiftMove {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-30px); }
-}
-
-@keyframes animCoreRing {
-    0% { stroke-dashoffset: 188; transform: rotate(0deg); transform-origin: 50px 50px; }
-    50% { stroke-dashoffset: 0; transform: rotate(180deg); transform-origin: 50px 50px; }
-    100% { stroke-dashoffset: 188; transform: rotate(360deg); transform-origin: 50px 50px; }
-}
-
-@keyframes animCoreBreath {
-    0%, 100% { transform: scale(1); transform-origin: 50px 50px; opacity: 0.5; }
-    50% { transform: scale(1.5); transform-origin: 50px 50px; opacity: 1; filter: drop-shadow(0 0 10px var(--primary)); }
-}
 
