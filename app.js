@@ -427,10 +427,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const bmr = (10 * weightKg) + (6.25 * HEIGHT_CM) - (5 * AGE) + 5;
         const tdee = Math.round(bmr * ACTIVITY_FACTOR);
         const targetCalories = tdee - CALORIC_DEFICIT; // Apply deficit for fat loss
-
-        // Change label to reflect target instead of raw TDEE
-        const tdeeLabel = document.querySelector('.tdee-container p');
-        if(tdeeLabel) tdeeLabel.innerText = "Obiettivo Calorico Odierno (Deficit Attivo)";
         
         tdeeDisplay.innerHTML = `${targetCalories} <small>kcal</small>`;
         currentWeightDisplay.innerHTML = `${weightKg} <small>kg</small>`;
