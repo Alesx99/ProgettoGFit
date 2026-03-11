@@ -260,6 +260,26 @@
         </main>
     </div>
 
+    <!-- Exercise Pop-up Modal -->
+    <div id="exercise-modal" class="modal-overlay">
+        <div class="modal-content glass">
+            <button class="modal-close" id="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modal-title">Esercizio</h2>
+            
+            <div class="modal-animation-container">
+                <div id="stickman-container">
+                    <!-- SVG Stickman injected here -->
+                </div>
+            </div>
+            
+            <div class="modal-details">
+                <div class="modal-reps" id="modal-reps"></div>
+                <p id="modal-desc"></p>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

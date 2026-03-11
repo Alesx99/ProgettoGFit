@@ -110,11 +110,116 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentEnv = 'home';
     let currentLvl = 1;
 
+    // ---- SVG Stickman Definitions ----
+    const stickmanAnims = {
+        squat: `
+            <svg viewBox="0 0 100 150" class="anim-squat">
+                <!-- Head -->
+                <circle cx="50" cy="20" r="12" />
+                <g style="animation: squatMove 2s ease-in-out infinite;">
+                    <!-- Body -->
+                    <path d="M 50 32 L 50 60" />
+                    <!-- Left Leg -->
+                    <path d="M 50 60 L 35 100 L 30 140" style="animation: squatKneeLeft 2s ease-in-out infinite;" />
+                    <!-- Right Leg -->
+                    <path d="M 50 60 L 65 100 L 70 140" style="animation: squatKneeRight 2s ease-in-out infinite;" />
+                    <!-- Left Arm -->
+                    <path d="M 50 35 L 30 60 L 50 50" style="animation: squatArmLeft 2s ease-in-out infinite;" />
+                    <!-- Right Arm -->
+                    <path d="M 50 35 L 70 60 L 50 50" style="animation: squatArmRight 2s ease-in-out infinite;" />
+                </g>
+            </svg>
+        `,
+        pushup: `
+            <svg viewBox="0 0 150 100" class="anim-pushup">
+                <!-- Floor Line -->
+                <path d="M 10 90 L 140 90" style="stroke: rgba(255,255,255,0.2); stroke-width: 2;" />
+                <g style="animation: pushupBody 2s ease-in-out infinite;">
+                    <circle cx="110" cy="40" r="10" /> <!-- Head -->
+                    <!-- Body -->
+                    <path d="M 100 45 L 30 75" />
+                    <!-- Legs -->
+                    <path d="M 30 75 L 10 85" />
+                </g>
+                <!-- Arms (separate to bend) -->
+                <path d="M 90 50 L 90 90" style="animation: pushupArm 2s ease-in-out infinite;" />
+            </svg>
+        `,
+        run: `
+            <svg viewBox="0 0 100 150" class="anim-run">
+                <g style="animation: runBodyBounce 1s linear infinite;">
+                    <circle cx="50" cy="20" r="10" /> <!-- Head -->
+                    <!-- Body -->
+                    <path d="M 50 30 L 50 70" />
+                    <!-- Left Arm -->
+                    <path d="M 50 35 L 30 50 L 50 70" style="animation: runArmLeft 0.5s ease-in-out infinite alternate;" />
+                    <!-- Right Arm -->
+                    <path d="M 50 35 L 70 50 L 80 30" style="animation: runArmRight 0.5s ease-in-out infinite alternate;" />
+                    <!-- Left Leg -->
+                    <path d="M 50 70 L 30 100 L 40 130" style="animation: runLegLeft 0.5s ease-in-out infinite alternate;" />
+                    <!-- Right Leg -->
+                    <path d="M 50 70 L 70 90 L 50 130" style="animation: runLegRight 0.5s ease-in-out infinite alternate;" />
+                </g>
+            </svg>
+        `,
+        lift: `
+            <svg viewBox="0 0 100 150" class="anim-lift">
+                <!-- Barbell -->
+                <path d="M 20 90 L 80 90" style="stroke: #a0a0a0; stroke-width: 4;" />
+                <circle cx="20" cy="90" r="8" style="fill: #39FF14; stroke: none;" />
+                <circle cx="80" cy="90" r="8" style="fill: #39FF14; stroke: none;" />
+                
+                <circle cx="50" cy="15" r="10" /> <!-- Head -->
+                <!-- Body -->
+                <path d="M 50 25 L 50 70" style="animation: liftBody 2.5s ease-in-out infinite;" />
+                <!-- Legs -->
+                <path d="M 50 70 L 40 100 L 40 130" />
+                <path d="M 50 70 L 60 100 L 60 130" />
+                <!-- Arms pulling -->
+                <path d="M 50 30 L 50 90" style="animation: liftArm 2.5s ease-in-out infinite;" />
+            </svg>
+        `,
+        core: `
+            <svg viewBox="0 0 150 100" class="anim-core">
+                <!-- Floor -->
+                <path d="M 10 90 L 140 90" style="stroke: rgba(255,255,255,0.2); stroke-width: 2;" />
+                <!-- Head -->
+                <circle cx="20" cy="80" r="10" style="animation: crunchHead 2s ease-in-out infinite;" />
+                <!-- Legs -->
+                <path d="M 80 80 L 100 50 L 120 90" />
+                <!-- Body Curling -->
+                <path d="M 20 80 Q 50 80 80 80" style="animation: crunchBody 2s ease-in-out infinite;" />
+                <!-- Arms behind head -->
+                <path d="M 40 70 L 30 50 L 15 75" style="animation: crunchHead 2s ease-in-out infinite;" />
+            </svg>
+        `
+    };
+
+    // Helper to determine animation type matching the exercise name
+    function getAnimationType(name) {
+        const lowerName = name.toLowerCase();
+        if (lowerName.includes('squat') || lowerName.includes('affondi')) return 'squat';
+        if (lowerName.includes('push') || lowerName.includes('flessioni') || lowerName.includes('press') || lowerName.includes('panca')) return 'pushup';
+        if (lowerName.includes('sprint') || lowerName.includes('jump') || lowerName.includes('balzi') || lowerName.includes('scatti')) return 'run';
+        if (lowerName.includes('rematore') || lowerName.includes('stacc') || lowerName.includes('trazioni') || lowerName.includes('tira')) return 'lift';
+        if (lowerName.includes('plank') || lowerName.includes('core') || lowerName.includes('twist') || lowerName.includes('crunch') || lowerName.includes('hollow')) return 'core';
+        return 'lift'; // Fallback
+    }
+
     // ---- DOM Elements ----
     const dynamicWorkoutContent = document.getElementById('dynamic-workout-content');
     const progressText = document.getElementById('progress-text');
     const progressCount = document.getElementById('progress-count');
     const progressFill = document.getElementById('progress-fill');
+    
+    // Modal Elements
+    const exerciseModal = document.getElementById('exercise-modal');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalTitle = document.getElementById('modal-title');
+    const modalReps = document.getElementById('modal-reps');
+    const modalDesc = document.getElementById('modal-desc');
+    const stickmanContainer = document.getElementById('stickman-container');
+
     
     // ---- Navigation Logic ----
     const navLinks = document.querySelectorAll('.nav-links li');
@@ -229,19 +334,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dynamicWorkoutContent.innerHTML = html;
 
-        // Bind Micro-animations
+        // Bind Micro-animations & Modal
         const cards = dynamicWorkoutContent.querySelectorAll('.exercise-card');
         cards.forEach(card => {
+            const h4 = card.querySelector('h4').innerText;
+            const reps = card.querySelector('.reps').innerText;
+            const desc = card.querySelector('p').innerText;
+
             card.addEventListener('click', () => {
-                // Remove class if it exists to allow re-triggering
+                // Micro-animation
                 card.classList.remove('exercise-anim-active');
-                // Force reflow
                 void card.offsetWidth;
-                // Add class back
                 card.classList.add('exercise-anim-active');
+
+                // Set Modal Data
+                modalTitle.innerText = h4;
+                modalReps.innerText = reps;
+                modalDesc.innerText = desc;
+
+                // Set Animation
+                const animKey = getAnimationType(h4);
+                stickmanContainer.innerHTML = stickmanAnims[animKey];
+
+                // Show Modal
+                exerciseModal.classList.add('active');
             });
         });
     }
+
+    // Modal Close Logic
+    modalCloseBtn.addEventListener('click', () => {
+        exerciseModal.classList.remove('active');
+        // Clear SVG after transition to avoid weird glitches on reopening
+        setTimeout(() => stickmanContainer.innerHTML = '', 400); 
+    });
+
+    exerciseModal.addEventListener('click', (e) => {
+        if (e.target === exerciseModal) {
+            exerciseModal.classList.remove('active');
+            setTimeout(() => stickmanContainer.innerHTML = '', 400); 
+        }
+    });
 
     // ---- Workout & Level Tab Listeners ----
     const wTabs = document.querySelectorAll('.w-tab');
@@ -279,6 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const AGE = 25; 
     const ACTIVITY_FACTOR = 1.725; 
 
+    // Target Deficit for Fat Loss
+    const CALORIC_DEFICIT = 500; 
+
     const bmiDisplay = document.getElementById('bmi-display');
     const tdeeDisplay = document.getElementById('tdee-display');
     const currentWeightDisplay = document.getElementById('current-weight-display');
@@ -287,9 +423,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const heightM = HEIGHT_CM / 100;
         const bmi = (weightKg / (heightM * heightM)).toFixed(1);
         bmiDisplay.innerHTML = `${bmi} <small>BMI</small>`;
+        
         const bmr = (10 * weightKg) + (6.25 * HEIGHT_CM) - (5 * AGE) + 5;
         const tdee = Math.round(bmr * ACTIVITY_FACTOR);
-        tdeeDisplay.innerHTML = `${tdee} <small>kcal</small>`;
+        const targetCalories = tdee - CALORIC_DEFICIT; // Apply deficit for fat loss
+
+        // Change label to reflect target instead of raw TDEE
+        const tdeeLabel = document.querySelector('.tdee-container p');
+        if(tdeeLabel) tdeeLabel.innerText = "Obiettivo Calorico Odierno (Deficit Attivo)";
+        
+        tdeeDisplay.innerHTML = `${targetCalories} <small>kcal</small>`;
         currentWeightDisplay.innerHTML = `${weightKg} <small>kg</small>`;
     }
 

@@ -644,3 +644,224 @@ h1, h2, h3, h4, h5, h6 {
     }
     .section-header h1 { font-size: 28px; }
 }
+
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    background: var(--bg-color);
+    padding: 40px;
+    border-radius: 24px;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(57, 255, 20, 0.2);
+    border: 1px solid rgba(57, 255, 20, 0.3);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    background: rgba(255, 71, 87, 0.2);
+    color: #ff4757;
+    transform: rotate(90deg);
+}
+
+#modal-title {
+    font-size: 24px;
+    color: var(--primary);
+    margin-bottom: 24px;
+    padding-right: 40px;
+    font-family: var(--font-heading);
+}
+
+.modal-animation-container {
+    width: 100%;
+    height: 250px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    overflow: hidden;
+    position: relative;
+}
+
+.modal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#modal-reps {
+    display: inline-block;
+    background: rgba(0, 240, 255, 0.15);
+    color: var(--secondary);
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    width: fit-content;
+}
+
+#modal-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Stickman Container & General SVG Styles */
+#stickman-container svg {
+    width: 150px;
+    height: 150px;
+    stroke: var(--primary);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+
+#stickman-container svg circle {
+    fill: var(--bg-color);
+    stroke-width: 5;
+}
+
+/* --- Stickman Animations Specific --- */
+
+/* 1. Squat Animation */
+@keyframes squatBody {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(30px); }
+}
+@keyframes squatLegL {
+    0%, 100% { stroke-dasharray: 60; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 60; stroke-dashoffset: 20; transform: translateY(-10px); }
+}
+.anim-squat .stickman-body { animation: squatBody 2s ease-in-out infinite; }
+.anim-squat .stickman-leg { transform-origin: top; animation: squatBody 2s ease-in-out infinite; }
+.anim-squat .stickman-arm { transform-origin: top; transform: rotate(45deg); }
+
+/* A better approach for SVG CSS animation is using group transforms */
+
+/* Squat Group */
+@keyframes squatMove {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(35px); }
+}
+@keyframes squatKneeRight {
+    0%, 100% { d: path("M 50 60 L 65 100 L 70 140"); }
+    50% { d: path("M 50 60 L 80 100 L 70 140"); }
+}
+@keyframes squatKneeLeft {
+    0%, 100% { d: path("M 50 60 L 35 100 L 30 140"); }
+    50% { d: path("M 50 60 L 20 100 L 30 140"); }
+}
+@keyframes squatArmRight {
+    0%, 100% { d: path("M 50 30 L 70 60 L 50 50"); }
+    50% { d: path("M 50 30 L 75 50 L 50 50"); }
+}
+@keyframes squatArmLeft {
+    0%, 100% { d: path("M 50 30 L 30 60 L 50 50"); }
+    50% { d: path("M 50 30 L 25 50 L 50 50"); }
+}
+
+
+/* Pushup Group */
+@keyframes pushupBody {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(20px) rotate(5deg); transform-origin: 90px 80px; }
+}
+@keyframes pushupArm {
+    0%, 100% { d: path("M 30 50 L 30 90"); }
+    50% { d: path("M 30 50 L 10 70 L 30 90"); }
+}
+
+/* Run/Sprint Group */
+@keyframes runArmLeft {
+    0%, 100% { d: path("M 50 30 L 30 50 L 50 70"); }
+    50% { d: path("M 50 30 L 70 50 L 80 30"); }
+}
+@keyframes runArmRight {
+    0%, 100% { d: path("M 50 30 L 70 50 L 80 30"); }
+    50% { d: path("M 50 30 L 30 50 L 50 70"); }
+}
+@keyframes runLegLeft {
+    0%, 100% { d: path("M 50 70 L 30 100 L 40 130"); }
+    50% { d: path("M 50 70 L 70 90 L 50 130"); }
+}
+@keyframes runLegRight {
+    0%, 100% { d: path("M 50 70 L 70 90 L 50 130"); }
+    50% { d: path("M 50 70 L 30 100 L 40 130"); }
+}
+@keyframes runBodyBounce {
+    0%, 50%, 100% { transform: translateY(0); }
+    25%, 75% { transform: translateY(-10px); }
+}
+
+/* Generic Lift (Deadlift/Row) */
+@keyframes liftBody {
+    0%, 100% { transform: rotate(45deg); transform-origin: 50px 70px; }
+    50% { transform: rotate(0deg); transform-origin: 50px 70px; }
+}
+@keyframes liftArm {
+    0%, 100% { d: path("M 50 30 L 50 90"); }
+    50% { d: path("M 50 30 L 50 60 L 50 90"); }
+}
+
+/* Generic Core (Plank/Crunch) */
+@keyframes crunchBody {
+    0%, 100% { d: path("M 20 80 Q 50 80 80 80"); } /* lying flat */
+    50% { d: path("M 20 80 Q 50 40 80 80"); } /* curving up */
+}
+@keyframes crunchHead {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(15px, -20px); }
+}
+
